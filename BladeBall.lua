@@ -2,6 +2,18 @@ task.spawn(function()
 
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
+-- ========== THEME OCEAN (BIRU) ==========
+WindUI:AddTheme({
+    Name = "Ocean",
+    Accent = Color3.fromHex("#2b5e9c"),
+    Background = Color3.fromHex("#0a1a33"),
+    Outline = Color3.fromHex("#3b7dd8"),
+    Text = Color3.fromHex("#ffffff"),
+    Placeholder = Color3.fromHex("#7a7a7a"),
+    Button = Color3.fromHex("#1e3a5f"),
+    Icon = Color3.fromHex("#a1a1aa"),
+})
+
 local Window = WindUI:CreateWindow({
     Title = "BluhavenHub",
     Icon = "rbxassetid://71760811781401",
@@ -9,7 +21,7 @@ local Window = WindUI:CreateWindow({
     Folder = "BluhavenHub",
     Size = UDim2.fromOffset(440, 315),
     Transparent = true,
-    Theme = "Dark",
+    Theme = "Ocean",
     User = {
         Enabled = true,
         Anonymous = false,
@@ -19,6 +31,32 @@ local Window = WindUI:CreateWindow({
     HideButton = false,
     MinimizeButton = true,
 })
+
+-- ========== HAPUS WATERMARK EULEN + HIDE UI BUTTON ==========
+task.spawn(function()
+    while task.wait(1) do
+        pcall(function()
+            for _, container in pairs({CoreGui, LocalPlayer:WaitForChild("PlayerGui")}) do
+                for _, gui in pairs(container:GetChildren()) do
+                    for _, obj in pairs(gui:GetDescendants()) do
+                        if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("ImageLabel") then
+                            local txt = (obj.Text or ""):lower()
+                            local nm  = obj.Name:lower()
+                            if txt:find("eulen") or nm:find("eulen") or nm:find("watermark") then
+                                obj.Visible = false
+                                obj.Parent:Destroy()
+                            end
+                            if txt:find("hide") and (obj:IsA("TextButton") or obj:IsA("ImageButton")) then
+                                obj.Visible = false
+                                obj:Destroy()
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
 
 -- ============================================================
 -- ========== TABS ==========
