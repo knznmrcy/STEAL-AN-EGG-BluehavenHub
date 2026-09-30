@@ -2,17 +2,54 @@ task.spawn(function()
 
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
+-- ========== HAPUS SISA UI FLUENT ==========
+task.spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            local containers = {CoreGui}
+            if gethui then
+                local ok, hui = pcall(gethui)
+                if ok and hui then table.insert(containers, hui) end
+            end
+            pcall(function()
+                if LocalPlayer then
+                    table.insert(containers, LocalPlayer:WaitForChild("PlayerGui"))
+                end
+            end)
+
+            for _, container in pairs(containers) do
+                for _, gui in pairs(container:GetChildren()) do
+                    if gui.Name:lower():find("bluhaven") then continue end
+                    if gui.Name:lower():find("windui") then continue end
+                    if gui.Name:lower():find("fluent") then gui:Destroy(); continue end
+
+                    for _, obj in pairs(gui:GetDescendants()) do
+                        if obj:IsA("TextLabel") or obj:IsA("TextButton") then
+                            if (obj.Text or ""):lower():find("eulen") then
+                                gui:Destroy()
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 -- ========== THEME OCEAN (BIRU) ==========
-WindUI:AddTheme({
-    Name = "Ocean",
-    Accent = Color3.fromHex("#2b5e9c"),
-    Background = Color3.fromHex("#0a1a33"),
-    Outline = Color3.fromHex("#3b7dd8"),
-    Text = Color3.fromHex("#ffffff"),
-    Placeholder = Color3.fromHex("#7a7a7a"),
-    Button = Color3.fromHex("#1e3a5f"),
-    Icon = Color3.fromHex("#a1a1aa"),
-})
+pcall(function()
+    WindUI:AddTheme({
+        Name = "Ocean",
+        Accent = Color3.fromHex("#2b5e9c"),
+        Background = Color3.fromHex("#0a1a33"),
+        Outline = Color3.fromHex("#3b7dd8"),
+        Text = Color3.fromHex("#ffffff"),
+        Placeholder = Color3.fromHex("#7a7a7a"),
+        Button = Color3.fromHex("#1e3a5f"),
+        Icon = Color3.fromHex("#a1a1aa"),
+    })
+end)
 
 local Window = WindUI:CreateWindow({
     Title = "BluhavenHub",
@@ -31,32 +68,6 @@ local Window = WindUI:CreateWindow({
     HideButton = false,
     MinimizeButton = true,
 })
-
--- ========== HAPUS WATERMARK EULEN + HIDE UI BUTTON ==========
-task.spawn(function()
-    while task.wait(1) do
-        pcall(function()
-            for _, container in pairs({CoreGui, LocalPlayer:WaitForChild("PlayerGui")}) do
-                for _, gui in pairs(container:GetChildren()) do
-                    for _, obj in pairs(gui:GetDescendants()) do
-                        if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("ImageLabel") then
-                            local txt = (obj.Text or ""):lower()
-                            local nm  = obj.Name:lower()
-                            if txt:find("eulen") or nm:find("eulen") or nm:find("watermark") then
-                                obj.Visible = false
-                                obj.Parent:Destroy()
-                            end
-                            if txt:find("hide") and (obj:IsA("TextButton") or obj:IsA("ImageButton")) then
-                                obj.Visible = false
-                                obj:Destroy()
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
 
 -- ============================================================
 -- ========== TABS ==========
